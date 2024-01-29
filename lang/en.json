@@ -1,0 +1,59 @@
+{
+  "title": "WP Downloader",
+  "url": "https://localhost",
+  "domain": "localhost",
+  "keywords": "Downloader, WP, Story Downloader",
+  "image": "static/icons/android-chrome-512x512.png",
+	"description": "Download stories for e-book readers, smartphones or desktop and more for free!",
+	"titlebar": {
+		"home": "Home",
+		"help": "Help",
+		"privacy": "Imprint & Privacy"
+	},
+	"home": {
+		"text": "Download stories for<br/> e-book readers, smartphones, desktop and more!",
+		"placeholder": "Enter URL to book, part or id",
+		"submit": "Next"
+	},
+	"help": [
+		{
+			"title": "How to download a story from WP?",
+			"text": "You can open the story that you want to download and simply change the domain to your domain or <b>localhost:3000</b>. Or you copy the URL of the book and paste it into the input field on our page."
+		},
+		{
+			"title": "Which format should I choose for download?",
+			"text": "We provide two different formats. First, the <b>EPUB</b> format and second the <b>HTML</b>.<br/>EPUB is for E-Book reader like Kindle. You can download this and load it on your E-Book reader with a software called Calibre. EPUB also works really well with Apple Books. So if you have an IPhone, you should download EPUB and you can read it with Apple Books.<br/>If you are on another platform like a PC or an android smartphone, you should download HTML. We provide a .html file that you can open with any browser. This contains a complete reader with the offline available story. The reader also gives you the option to change the font, font size and color scheme."
+		},
+		{
+			"title": "Terms",
+			"text": "This service is for private use only, do not sell <b>others</b>'s downloaded eBooks!</br>We do not endorse or condone such activity!"
+		},
+		{
+			"title": "Any questions or problems?",
+			"text": "Make an Issue on the Github repo<br>Thanks to Feuerhamster and BluemediaGER for the Source</br>"
+		}
+	],
+	"book": {
+		"download": {
+			"epub": "Download for E-Book reader (epub)",
+			"html": "Download PC / Smartphone (html)",
+			"pdf": "Download as PDF (pdf)"
+		},
+		"author": "Author",
+		"pubDate": "Published",
+		"lang": "Language",
+		"loading": {
+			"text": "Plese wait a few seconds while we prepare your download..."
+		}
+	},
+	"parts": "Parts",
+	"overview": "Overview",
+	"next": "Next part",
+	"startReading": "Start reading",
+	"errors": {
+		"bookNotFound": "Sorry but we can't find the book!",
+		"invalidSearch": "We can not parse your entered value.<br/> Please provide a link to a story or an ID.",
+		"tokenError": "Your Captcha-Token is invalid.",
+		"serverError": "The book could not be retrieved/converted due to an internal error."
+	}
+}

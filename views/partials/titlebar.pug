@@ -1,0 +1,8 @@
+div#titlebar
+    img(src="/icons/base-icon.svg" onclick="window.location.href = '/'" alt="logo")
+    h1 WP Downloader
+    nav#nav
+        a(href="/")= lang.titlebar.home
+        a(href="/help")= lang.titlebar.help
+
+    a#toggle-mobile-nav(href="#" onclick="toggleMobileNav(event)") Menu

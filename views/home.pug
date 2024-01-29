@@ -1,0 +1,12 @@
+extends _layout
+
+block page
+    div.page.center
+        h3 WP Story Downloader
+        br
+        h1!= lang.home.text
+
+        form#searchform
+            p#error-result.error
+            input(type="text" placeholder=lang.home.placeholder)
+            button= lang.home.submit

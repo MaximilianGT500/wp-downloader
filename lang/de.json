@@ -1,0 +1,57 @@
+{
+  "title": "WP Downloader",
+  "url": "https://localhost",
+  "domain": "localhost",
+  "keywords": "Downloader, WP, Story Downloader",
+  "image": "static/icons/android-chrome-512x512.png",
+	"description": "Lade dir Geschichten für deinen E-Book-Reader, dein Smartphone oder deinen Desktop-PC und andere Plattformen kostenlos herunter!",
+	"titlebar": {
+		"home": "Startseite",
+		"help": "Hilfe"
+	},
+	"home": {
+		"text": "Lade Geschichten für<br/> E-Book-Reader, Smartphones, Desktop-PCs und weitere Plattformen kostenlos herunter!",
+		"placeholder": "Buch URL, Kapitel oder ID eingeben",
+		"submit": "Weiter"
+	},
+	"help": [
+		{
+			"title": "Wie kann ich eine Geschichte von WP herunterladen?",
+			"text": "Zuerst suchst du dir die Geschichte normal auf WP aus. Sobald du in einem Kapitel, oder auf der Informationsseite deiner Geschichte bist, kannst du die Adresse von ... zu deiner Domain bzw. <b>localhost:3000</b> ändern. Bitte ändere nur die Domain und lasse alles davor und danach exakt so, wie es ist. Nach dem du die Anfrage abgeschickt hast, landest du auf unserer Seite und kannst die Geschichte herunterladen. Alternativ kannst du auch die Adresse von Wattpad kopieren und in das Eingabefeld auf der Startseite einfügen."
+		},
+		{
+			"title": "Welches Format soll ich zum Herunterladen wählen?",
+			"text": "Wir bieten dir zwei verschiedene Formate an. Erstens das <b>EPUB</b>-Format und zweitens das <b>HTML</b>-Format.<br/>EPUB-Dateien eignen sich ideal für E-Book-Reader wie z.B. den Amazon Kindle oder den Tolino. Um die Geschichte auf deinen E-Book-Reader zu laden, kannst du z.B. die Software <a href=\"https://www.calibre-ebook.com/about\">Calibre</a> verwenden. Das EPUB-Format ist ebenfalls mit Apple Books kompatibel. Wenn du also ein iOS-Gerät hast, solltest du das EPUB-Format herunterladen.<br/> Falls du auf einer anderen Plattform wie einem PC oder einem Android-Smartphone lesen möchtest, sollten du das HTML-Format wählen. Diese Datei enthält einen kompletten Reader inklusive deiner Geschichte und kann mit jedem Webbrowser geöffnet werden. Der Reader gibt dir auch die Möglichkeit, die Schriftart, Schriftgröße und das Farbschema zu ändern."
+		},
+		{
+			"title": "Bedingungen",
+			"text": "Dieser Service ist auschließlich für den Privatgebraucht gedacht, man darf die Heruntergeladenen eBooks von <b>anderen</b> nicht Verkaufen!</br>Wir unterstützen oder Tolerieren solch eine Aktivität nicht!"
+		},
+		{
+			"title": "Hast du Fragen oder Probleme?",
+			"text": "Öffne ein Issue auf der Github-Seite.<br>Danke an Feuerhamster und BluemediaGER für den Source</br>"
+		}
+	],
+	"book": {
+		"download": {
+			"epub": "Download für E-Book-Reader (epub)",
+			"html": "Download für PC / Smartphone (html)",
+			"pdf": "Download als PDF (pdf)"
+		},
+		"author": "Autor",
+		"pubDate": "Veröffentlicht",
+		"lang": "Sprache",
+		"loading": {
+			"text": "Bitte warte einen Moment, während wir deinen Download vorbereiten..."
+		}
+	},
+	"parts": "Kapitel",
+	"overview": "Übersicht",
+	"next": "Nächstes Kapitel",
+	"startReading": "Jetzt lesen",
+	"errors": {
+		"bookNotFound": "Leider konnten wir diese Geschichte nicht finden.",
+		"invalidSearch": "Leider konnten wir deine Eingabe nicht verarbeiten.<br/>Bitte gebe einen Link oder die ID einer Geschichte an.",
+		"serverError": "Das Buch konnte aufgrund eines internen Fehlers nicht abgerufen/konvertiert werden."
+	}
+}

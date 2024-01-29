@@ -1,0 +1,22 @@
+{
+  "name": "wp-downloader",
+  "version": "1.2.1",
+  "private": true,
+  "description": "A website to download wp stories",
+  "main": "main.js",
+  "dependencies": {
+    "axios": "^0.21.2",
+    "express": "^4.17.1",
+    "jsdom": "^16.2.2",
+    "jszip": "^3.7.0",
+    "node-cache": "^5.1.2",
+    "pug": "^3.0.2",
+    "sanitize-html": "^2.4.0"
+  },
+  "scripts": {
+    "start": "node main.js"
+  },
+  "author": "MaximilianGT500",
+  "repository": "github:MaximilianGT500/wp-downloader",
+  "license": "MIT"
+}
