@@ -41,9 +41,6 @@ If you have set it up properly, your terminal should output the URL that you can
 - `id` The id of a wattpad story
 - `format` The format for a download *epub|html*
 
-**Querystring:**
-- `token` A user response from ReCaptcha
-
 **Returns:**
 - `.epub` file download (Content-disposition: attachment)
 - `.html` file download (Content-disposition: attachment)
