@@ -1,7 +1,7 @@
 # WP Downloader
 
 > [!IMPORTANT]
-> # NOW HOSTED : https://wpdl.us
+> # 3rd Party Hosted Instance: https://wpdl.us
 
 Download WP stories for e-book readers, smartphones, desktop and more for free!
 
