@@ -1,7 +1,14 @@
 # WP Downloader
 
-> [!IMPORTANT]
-> # 3rd Party Hosted Instance: https://wpdl.us
+----
+
+> [!TIP]
+> # 3rd Party Hosted Instance: https://wpdl.us <br/>
+
+> [!TIP]
+> # Desktop Version (Electron Wrap): [WPDL-Electron](https://github.com/sipsuru/wp-downloader-electron)
+
+---
 
 Download WP stories for e-book readers, smartphones, desktop and more for free!
 
