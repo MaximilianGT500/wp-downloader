@@ -5,7 +5,7 @@
   "description": "A website to download wp stories",
   "main": "main.js",
   "dependencies": {
-    "axios": "^0.21.2",
+    "axios": "^1.7.7",
     "express": "^4.17.1",
     "jsdom": "^16.2.2",
     "jszip": "^3.7.0",
