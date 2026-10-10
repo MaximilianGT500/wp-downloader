@@ -1,5 +1,6 @@
 entrypoint = "main.js"
 run = "npm start"
+modules = ["nodejs-24"]
 
 [deployment]
 deploymentTarget = "cloudrun"
