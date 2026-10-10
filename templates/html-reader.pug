@@ -1,0 +1,372 @@
+doctype html
+html(lang=langName)
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        title= book.title
+        style.
+            :root {
+                --bg: #f7f7f4;
+                --fg: #232323;
+                --panel: #ffffff;
+                --muted: #707070;
+                --border: #e2e2de;
+                --accent: #ff6b30;
+                --reader-font: Georgia, "Times New Roman", serif;
+            }
+
+            body[data-theme="sepia"] {
+                --bg: #f2e8d9;
+                --fg: #241d14;
+                --panel: #faf3e8;
+                --muted: #7a6f5f;
+                --border: #d9c8ae;
+            }
+
+            body[data-theme="dark"] {
+                --bg: #121214;
+                --fg: #e9e9ec;
+                --panel: #1c1c21;
+                --muted: #9d9da6;
+                --border: #32323a;
+            }
+
+            body[data-font="1"] { --reader-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+            body[data-font="2"] { --reader-font: "Courier New", Courier, monospace; }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                margin: 0;
+                background-color: var(--bg);
+                color: var(--fg);
+                font-family: var(--reader-font);
+                font-size: 18px;
+                line-height: 1.65;
+                transition: background-color 0.2s ease, color 0.2s ease;
+            }
+
+            /* ---------- Progress ---------- */
+
+            #progress {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: var(--border);
+                z-index: 20;
+            }
+
+            #progress-bar {
+                display: block;
+                width: 0;
+                height: 100%;
+                background: var(--accent);
+            }
+
+            /* ---------- Book meta ---------- */
+
+            #book-meta {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                max-width: 640px;
+                margin: 0 auto;
+                padding: 56px 22px 8px;
+                text-align: center;
+            }
+
+            .book-cover {
+                width: 200px;
+                border-radius: 8px;
+                box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+                margin-bottom: 30px;
+            }
+
+            #book-meta h1 {
+                margin: 0 0 14px;
+                font-size: 34px;
+                line-height: 1.25;
+            }
+
+            .author-line {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin: 0 0 6px;
+                color: var(--muted);
+            }
+
+            .avatar {
+                width: 34px;
+                height: 34px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+            .meta-line {
+                margin: 0 0 6px;
+                color: var(--muted);
+            }
+
+            .description {
+                margin: 16px 0 0;
+                color: var(--muted);
+                font-style: italic;
+                white-space: pre-line;
+            }
+
+            /* ---------- Parts ---------- */
+
+            #content {
+                max-width: 640px;
+                margin: 0 auto;
+                padding: 24px 22px 140px;
+            }
+
+            .part h2 {
+                font-size: 26px;
+                line-height: 1.3;
+                margin: 0 0 18px;
+            }
+
+            .part {
+                margin-bottom: 56px;
+            }
+
+            .part img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            /* ---------- Controls ---------- */
+
+            #controls {
+                position: fixed;
+                left: 50%;
+                bottom: 16px;
+                transform: translateX(-50%);
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                padding: 6px;
+                background: var(--panel);
+                border: 1px solid var(--border);
+                border-radius: 999px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+                z-index: 20;
+            }
+
+            #controls button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 42px;
+                height: 42px;
+                padding: 0;
+                border: 0;
+                border-radius: 50%;
+                background: none;
+                color: var(--fg);
+                font-family: inherit;
+                font-size: 19px;
+                cursor: pointer;
+                transition: background-color 0.15s ease;
+            }
+
+            #controls button:hover {
+                background: color-mix(in srgb, var(--fg) 10%, transparent);
+            }
+
+            #controls button svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .theme-icon {
+                display: none;
+            }
+
+            body[data-theme="light"] .theme-icon.light,
+            body[data-theme="sepia"] .theme-icon.sepia,
+            body[data-theme="dark"] .theme-icon.dark {
+                display: block;
+            }
+
+            #controls .status {
+                padding: 0 14px;
+                color: var(--muted);
+                font-size: 14px;
+                white-space: nowrap;
+            }
+
+            #controls .status b {
+                color: var(--fg);
+                font-weight: 600;
+            }
+
+            @media (max-width: 620px) {
+                #controls .status {
+                    display: none;
+                }
+            }
+    body
+
+        div#progress
+            span#progress-bar
+
+        header#book-meta
+            if image
+                img.book-cover(src=image alt=book.title)
+            h1= book.title
+            p.author-line
+                if avatar
+                    img.avatar(src=avatar alt="")
+                span= lang.book.author + ": " + book.user.name
+            if book.lastPublishedPart
+                p.meta-line= lang.book.pubDate + ": " + new Date(book.lastPublishedPart.createDate).getFullYear()
+            if book.description
+                p.description= book.description
+
+        main#content
+            each part in parts
+                section.part
+                    h2= part.title
+                    div!= part.data
+
+        footer#controls
+            button#font-button(type="button" title=lang.reader.font aria-label=lang.reader.font)
+                svg(viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
+                    path(d="M4 7V5h16v2M12 5v14M9 19h6")
+            button#font-minus(type="button" title=lang.reader.fontSmaller aria-label=lang.reader.fontSmaller)
+                svg(viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round")
+                    path(d="M5 12h14")
+            button#font-plus(type="button" title=lang.reader.fontBigger aria-label=lang.reader.fontBigger)
+                svg(viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round")
+                    path(d="M12 5v14M5 12h14")
+            button#theme-button(type="button" title=lang.reader.colorMode aria-label=lang.reader.colorMode)
+                svg.theme-icon.light(viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
+                    circle(cx="12" cy="12" r="4")
+                    path(d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41")
+                svg.theme-icon.sepia(viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
+                    path(d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 1 4 17.5v-13Z")
+                    path(d="M4 12h16")
+                svg.theme-icon.dark(viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
+                    path(d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z")
+            span.status
+                b= lang.book.parts + ": "
+                span= parts.length
+                |  ·  
+                b= lang.reader.fontSize + ": "
+                span#font-size-display 18
+
+        script.
+            (function () {
+                "use strict";
+
+                var KEY = "wpdl-";
+
+                function storeGet(key, fallback) {
+                    try {
+                        var value = localStorage.getItem(KEY + key);
+                        return value === null ? fallback : value;
+                    } catch (e) {
+                        return fallback;
+                    }
+                }
+
+                function storeSet(key, value) {
+                    try {
+                        localStorage.setItem(KEY + key, value);
+                    } catch (e) { /* private mode */ }
+                }
+
+                var body = document.body;
+                var fontSizeDisplay = document.querySelector("#font-size-display");
+                var progressBar = document.querySelector("#progress-bar");
+
+                /* ---------- Restore settings ---------- */
+
+                var fontSizes = [16, 18, 20, 22, 24, 26, 28];
+                var fontSize = parseInt(storeGet("font-size", "18"), 10);
+                if (fontSizes.indexOf(fontSize) === -1) fontSize = 18;
+                body.style.fontSize = fontSize + "px";
+                fontSizeDisplay.textContent = fontSize;
+
+                body.setAttribute("data-font", storeGet("font", "0"));
+
+                var savedTheme = storeGet("theme", "auto");
+                var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                var theme = savedTheme === "auto"
+                    ? (prefersDark ? "dark" : "light")
+                    : savedTheme;
+                body.setAttribute("data-theme", theme);
+
+                var savedScroll = parseInt(storeGet("scroll", "0"), 10);
+                if (savedScroll) window.scrollTo(0, savedScroll);
+
+                /* ---------- Progress + scroll persistence ---------- */
+
+                var scrollTimer = null;
+
+                function updateProgress() {
+                    var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                    var percent = maxScroll > 0 ? Math.min(100, Math.round((window.scrollY / maxScroll) * 100)) : 0;
+                    progressBar.style.width = percent + "%";
+                }
+
+                window.addEventListener("scroll", function () {
+                    updateProgress();
+                    window.clearTimeout(scrollTimer);
+                    scrollTimer = window.setTimeout(function () {
+                        storeSet("scroll", String(Math.round(window.scrollY)));
+                    }, 120);
+                }, { passive: true });
+
+                updateProgress();
+
+                /* ---------- Font size ---------- */
+
+                function changeFontSize(increase) {
+                    var index = fontSizes.indexOf(fontSize);
+                    var next = increase ? index + 1 : index - 1;
+                    if (next < 0 || next >= fontSizes.length) return;
+
+                    fontSize = fontSizes[next];
+                    body.style.fontSize = fontSize + "px";
+                    fontSizeDisplay.textContent = fontSize;
+                    storeSet("font-size", String(fontSize));
+                }
+
+                document.querySelector("#font-minus").addEventListener("click", function () {
+                    changeFontSize(false);
+                });
+
+                document.querySelector("#font-plus").addEventListener("click", function () {
+                    changeFontSize(true);
+                });
+
+                /* ---------- Font family ---------- */
+
+                document.querySelector("#font-button").addEventListener("click", function () {
+                    var current = parseInt(body.getAttribute("data-font"), 10) || 0;
+                    var next = (current + 1) % 3;
+                    body.setAttribute("data-font", String(next));
+                    storeSet("font", String(next));
+                });
+
+                /* ---------- Color mode ---------- */
+
+                var themes = ["light", "sepia", "dark"];
+
+                document.querySelector("#theme-button").addEventListener("click", function () {
+                    var current = body.getAttribute("data-theme");
+                    var next = themes[(themes.indexOf(current) + 1) % themes.length];
+                    body.setAttribute("data-theme", next);
+                    storeSet("theme", next);
+                });
+
+            })();

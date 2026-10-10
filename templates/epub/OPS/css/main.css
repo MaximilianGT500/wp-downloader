@@ -15,7 +15,7 @@ p {
   text-indent: 1.0em;
   text-align: justify;
 }
-  
+
 body > p:first-child {text-indent: 0;}
 div.text p:first-child {text-indent: 0;}
 p.dropcap, p.noindent {text-indent: 0;}
@@ -31,6 +31,11 @@ a {
   text-decoration: none;
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 h2 {
   padding-top: 0;
   display: block;
@@ -43,7 +48,7 @@ h2 {
   margin-bottom: 20px;
   background-color: #FFF;
 }
-  
+
 .chapterHeader .translation {
   float: left;
   font-weight: normal;
@@ -54,7 +59,7 @@ h2 {
   font-size: 26px;
   background-color: #FFF;
 }
-                             
+
 .chapterHeader .count {
   line-height: 100%;
   font-style: normal;
@@ -73,7 +78,7 @@ div.book {
   padding-top: 6.0em;
   page-break-before: right;
 }
-  
+
 div.chapter {padding-top: 2.0em;}
 div.part {padding-top: 2.0em;}
 h3.section_title {text-align: center;}
@@ -84,7 +89,7 @@ div.verseline {
   margin-left: 1.0em;
   text-indent: -1.0em;
 }
-  
+
 span.dropcap {
   font-size: 300%;
   font-weight: bold;

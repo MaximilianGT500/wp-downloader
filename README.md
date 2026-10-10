@@ -1,73 +1,119 @@
 # WP Downloader
 
-----
+> [!NOTE]
+> **WP Downloader** ist ein unabhängiges Open-Source-Projekt und steht in keiner Verbindung zu **Wattpad Corp.**
 
-> [!TIP]
-> # Android Guide (With Termux): [WPDL-Android](https://github.com/sipsuru/wp-downloader-android) <br/>
+Lade Wattpad-Geschichten kostenlos herunter – als **EPUB** für deinen E-Book-Reader oder als **HTML-Datei mit integriertem Reader** für Browser, PC und Smartphone. Die HTML-Datei funktioniert komplett offline und bietet anpassbare Schriftart, Schriftgröße und Farbmodus (Hell, Sepia, Dunkel).
 
-> [!TIP]
-> # Desktop Version (Electron Wrap): [WPDL-Electron](https://github.com/sipsuru/wp-downloader-electron)
+- **Framework:** [Node.js](https://nodejs.org/) ≥ 18 + [Express 5](https://expressjs.com/)
+- **Templates:** [Pug](https://pugjs.org/)
+- **Formate:** EPUB 2 und eigenständiger HTML-Reader
 
----
+## Screenshots
 
-Download WP stories for e-book readers, smartphones, desktop and more for free!
-
-This software based on Node.js and Express.js can fetch stories from Wattpad and convert it into an EPUB file or a full functional HTML reader for offline availability.
-
-> ⚠ Important information  
-> [Statement of WattP.EU / WattPad.CC](https://www.reddit.com/r/wattpad_downloader/comments/1adulkg/statement_for_wattpeu_wattpadcc/)
-
-## Prerequisites and information
-**This is a server software and NOT a simple app!**  
-It means that this software is meant to be installed on a server by a system administrator and then hooked into a network (for example, the Internet) so that other people can access the website through a browser.  
-The Wattpad Downloader is not a program or an app that everyone downloads individually and then simply executes.
-
-However, you can install it for local use on a PC with Windows, Mac or Linux.
-For that, you need to install the [Node.js Framework](https://nodejs.org/en/).
-Then follow the installation steps below.
-
-If you have set it up properly, your terminal should output the URL that you can open in a web browser.
+| Startseite (hell) | Startseite (dunkel) | Buchseite |
+| --- | --- | --- |
+| ![WP Downloader Startseite, helles Design](docs/screenshots/home.png) | ![WP Downloader Startseite, dunkles Design](docs/screenshots/home-dark.png) | ![WP Downloader Buchseite](docs/screenshots/book.png) |
 
 ## Installation
-1. Clone / download the repository
-2. Go to the root directory of the project
-3. (optional) Make sure to set up the environment variables properly
-4. Run `npm install` in your terminal
-5. Then run `npm start` in your terminal
 
-## Project structure
-- `/lang` Contains JSON files with language translations. The file name corresponds to the 2-3 letters language tag from the *Accept-Language* http header.
-- `/routes` Contains js files with express routers.
-- `/services` Contains js files with static classes that provides some functionalities.
-- `/static` Contains multiple files that will be hostet as static assets by express.
-- `/templates` Contains the templates to convert the wattpad stories to the specific formats.
-- `/views` Contains Pug template files that will be rendered by express.
+> [!IMPORTANT]
+> Dies ist eine **Server-Software**, keine klassische App. Sie wird auf einem Server (oder lokal auf dem eigenen Rechner) gestartet und im Browser aufgerufen. Für den Betrieb wird [Node.js](https://nodejs.org/) ≥ 18 benötigt.
 
-## API Endpoints
-**Important:** Do not use this automated! The endpoint have a high response time because the backend have to fetch all data and texts from the wattpad books.
+```bash
+# 1. Repository klonen
+git clone https://github.com/MaximilianGT500/wp-downloader.git
+cd wp-downloader
 
-### `/api/:id/download/:format`
-**Params:**
-- `id` The id of a wattpad story
-- `format` The format for a download *epub|html*
+# 2. Abhängigkeiten installieren
+npm install
 
-**Returns:**
-- `.epub` file download (Content-disposition: attachment)
-- `.html` file download (Content-disposition: attachment)
-- `{ "error": "book_not_found" }`
+# 3. Starten
+npm start
+# → http://localhost:3000
+```
 
-## File formats for story conversion
+Für die Entwicklung mit automatischem Neustart:
+
+```bash
+npm run dev
+```
+
+## Konfiguration (Umgebungsvariablen)
+
+| Variable | Standard | Beschreibung |
+| --- | --- | --- |
+| `PORT` | `3000` | Port, auf dem der Server lauscht |
+| `HOST` | `0.0.0.0` | Bind-Adresse des Servers |
+| `DEFAULT_LANG` | `de` | Fallback-Sprache, wenn keine passende Browser-Sprache gefunden wird |
+| `CACHE_TTL` | `86400` | Cache-Lebensdauer (Sekunden) für API-Antworten und Kapiteltexte |
+| `REQUEST_TIMEOUT` | `15000` | Timeout (ms) für Anfragen an die Wattpad-API |
+| `PART_CONCURRENCY` | `5` | Anzahl parallel geladener Kapitel |
+| `PART_RETRIES` | `2` | Wiederholungsversuche pro Kapitel |
+| `NODE_ENV` | – | `production` aktiviert das View-Caching |
+
+## Verwendung
+
+1. Öffne die gewünschte Geschichte auf Wattpad.
+2. Kopiere die URL der Story **oder** eines Kapitels.
+3. Füge sie auf der Startseite in das Eingabefeld ein – oder gib direkt die Story-ID ein.
+4. Wähle auf der Buchseite das gewünschte Format:
+   - **EPUB** – für E-Book-Reader (Tolino, Kindle, Apple Books, …)
+   - **HTML** – eine einzelne Datei mit integriertem Reader, öffnet sich in jedem Browser
+
+Alternativ lässt sich die Wattpad-URL auch direkt umschreiben: `https://www.wattpad.com/story/<id>-<slug>` → `http://localhost:3000/story/<id>-<slug>` (die Weiterleitung funktioniert automatisch).
+
+## API
+
+> [!WARNING]
+> Die Endpunkte sind **nicht für automatisierte Massenabfragen** gedacht – der Server lädt bei jedem Download sämtliche Kapitel von Wattpad.
+
+### `GET /api/health`
+
+Statusprüfung. Antwort: `{ "status": "ok", "uptime": <sekunden> }`
+
+### `GET /api/:id/download/:format`
+
+| Parameter | Beschreibung |
+| --- | --- |
+| `id` | ID der Wattpad-Story |
+| `format` | `epub` \| `html` |
+
+Antworten:
+
+- `200` – Datei-Download (`Content-Disposition: attachment`)
+- `400` – `{ "error": "unknown_format" }` oder `{ "error": "invalid_id" }`
+- `404` – `{ "error": "book_not_found" }`
+- `502` – `{ "error": "parts_unavailable" }` (keine Kapitel ladbar)
+- `500` – `{ "error": "internal_server_error" }`
+
+## Formate
 
 ### EPUB
-EPUB is an e-book file format that uses the ". epub" file extension.
-The term is short for electronic publication and is sometimes styled ePub.
-EPUB is supported by many e-readers, and compatible software is available for most smartphones, tablets, and computers.
+Das offene E-Book-Format (`.epub`), unterstützt von praktisch allen Readern und kompatibler Software auf Smartphones, Tablets und PCs.
 
 ### HTML
-The HTML file features an entire reader including the story (so people can read it offline).
+Eine einzelne `.html`-Datei mit komplettem Reader inklusive der Geschichte – offline nutzbar, mit veränderbarer Schriftart, Schriftgröße und Farbmodus.
 
-## Main developers
-- [Feuerhamster](https://github.com/Feuerhamster)
-- [BluemediaGER](https://github.com/BluemediaGER)
+## Projektstruktur
 
-*We are not associated with Wattpad Corp. in any way.*
+- `/lang` – JSON-Dateien mit den Übersetzungen (Dateiname = Sprachkürzel aus dem `Accept-Language`-Header)
+- `/routes` – Express-Router (Frontend + API)
+- `/services` – statische Service-Klassen (Wattpad-API, Konvertierung, Übersetzung, Logger)
+- `/static` – statische Assets (CSS, Client-JS, Icons, Manifest)
+- `/templates` – Vorlagen für die Konvertierung (EPUB-Struktur, HTML-Reader)
+- `/tools` – Hilfsskripte (z. B. Icon-Generierung)
+- `/views` – Pug-Templates der Website
+- `/docs/screenshots` – Screenshots für das README
+
+## Rechtliches & Bedingungen
+
+Dieser Service ist **ausschließlich für den privaten Gebrauch** gedacht. Es ist nicht erlaubt, heruntergeladene E-Books anderer zu verkaufen – wir unterstützen oder tolerieren solche Aktivitäten nicht. Bitte respektiere die Rechte der Autorinnen und Autoren.
+
+## Danksagung
+
+Vielen Dank an [Feuerhamster](https://github.com/Feuerhamster) und [BluemediaGER](https://github.com/BluemediaGER) für den ursprünglichen Quellcode.
+
+## Lizenz
+
+[MIT](LICENSE) © MaximilianGT500

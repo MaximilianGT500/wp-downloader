@@ -1,42 +1,46 @@
 const fs = require("fs");
+const path = require("path");
 
-class Translation{
+const LANG_DIR = path.join(__dirname, "..", "lang");
+const DEFAULT_LANG = process.env.DEFAULT_LANG || "de";
 
-	static langData = {}
+class Translation {
+
+	static langData = {};
 	static langs = [];
 
-	static loadLanguages(){
+	static loadLanguages() {
 
-		let langs = fs.readdirSync("./lang");
+		for (const file of fs.readdirSync(LANG_DIR)) {
+			if (!file.endsWith(".json")) continue;
 
-		for(let lang of langs){
-
-			let langName = lang.split(".")[0];
-
-			Translation.langData[langName] = JSON.parse(fs.readFileSync("./lang/" + lang).toString());
-
+			const langName = path.basename(file, ".json");
+			Translation.langData[langName] = JSON.parse(fs.readFileSync(path.join(LANG_DIR, file), "utf8"));
 			Translation.langs.push(langName);
-
 		}
 
 	}
 
-	static getLangData(lang){
-		return Translation.langData[lang];
-	}
+	/**
+	 * Resolves the best matching translation for a list of accepted languages
+	 * (e.g. the result of req.acceptsLanguages). Falls back to DEFAULT_LANG.
+	 */
+	static getTranslation(accepted) {
 
-	static getTranslation(availableLangs){
+		const acceptedList = Array.isArray(accepted) ? accepted : [accepted];
 
-		let langName = Array.isArray(availableLangs) ? availableLangs[0] : availableLangs;
-		let lang;
+		for (const code of acceptedList) {
+			if (typeof code !== "string" || !code) continue;
 
-		if(availableLangs){
-			lang = Translation.getLangData(langName);
-		}else{
-			lang = Translation.getLangData("de");
+			const base = code.toLowerCase().split("-")[0];
+			if (Translation.langData[base]) {
+				return { lang: Translation.langData[base], langName: base };
+			}
 		}
 
-		return { lang, langName };
+		const fallback = Translation.langData[DEFAULT_LANG] ? DEFAULT_LANG : (Translation.langs[0] || "en");
+		return { lang: Translation.langData[fallback], langName: fallback };
+
 	}
 
 }

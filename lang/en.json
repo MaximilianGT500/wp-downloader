@@ -1,59 +1,113 @@
 {
-  "title": "WP Downloader",
-  "url": "https://localhost",
-  "domain": "localhost",
-  "keywords": "Downloader, WP, Story Downloader",
-  "image": "static/icons/android-chrome-512x512.png",
-	"description": "Download stories for e-book readers, smartphones or desktop and more for free!",
-	"titlebar": {
+	"title": "WP Downloader",
+	"url": "https://localhost",
+	"domain": "localhost",
+	"keywords": "Wattpad Downloader, WP Downloader, EPUB, HTML, E-Book Reader",
+	"image": "https://localhost/icons/apple-touch-icon.png",
+	"description": "Download Wattpad stories for free as EPUB or HTML – for e-book readers, smartphones and desktop.",
+	"skipToContent": "Skip to content",
+	"navbar": {
 		"home": "Home",
 		"help": "Help",
-		"privacy": "Imprint & Privacy"
+		"menu": "Open menu"
+	},
+	"theme": {
+		"switchToDark": "Switch to dark mode",
+		"switchToLight": "Switch to light mode"
 	},
 	"home": {
-		"text": "Download stories for<br/> e-book readers, smartphones, desktop and more!",
-		"placeholder": "Enter URL to book, part or id",
-		"submit": "Next"
+		"heroTitle": "Download Wattpad stories",
+		"heroText": "Paste a link to a story or a chapter and download it for free as EPUB for your e-book reader or as an HTML file with a built-in reader.",
+		"placeholder": "Paste story link, chapter link or ID",
+		"submit": "Next",
+		"invalidSearch": "We could not process your input. Please provide a link to a story or a chapter, or a numeric ID.",
+		"featuresTitle": "How it works",
+		"steps": [
+			{
+				"title": "Copy the link",
+				"text": "Open the story you want on Wattpad and copy the address of the story or one of its chapters."
+			},
+			{
+				"title": "Paste it here",
+				"text": "Paste the link into the input field – or simply enter the story's ID."
+			},
+			{
+				"title": "Pick a format",
+				"text": "Download the story as EPUB for your e-book reader or as an HTML reader for browsers, PC and smartphone."
+			}
+		],
+		"formatsTitle": "Available formats",
+		"formats": [
+			{
+				"title": "EPUB",
+				"text": "The e-book format for readers like Tolino, Kindle or Apple Books. Perfect for reading on the go."
+			},
+			{
+				"title": "HTML reader",
+				"text": "A single HTML file with a built-in reader – font, font size and color mode can be adjusted."
+			}
+		]
+	},
+	"book": {
+		"back": "Back to home",
+		"author": "Author",
+		"pubDate": "Published",
+		"language": "Language",
+		"parts": "Chapters",
+		"tags": "Tags",
+		"description": "Description",
+		"showMore": "Show more",
+		"showLess": "Show less",
+		"downloadTitle": "Download",
+		"download": {
+			"epub": "Download as EPUB",
+			"html": "Download as HTML",
+			"epubHint": "For e-book readers, tablets and Apple Books",
+			"htmlHint": "Offline reader for browsers, PC and smartphone"
+		},
+		"loading": {
+			"title": "Preparing your download …",
+			"text": "We are fetching all chapters from Wattpad. This may take a moment."
+		},
+		"error": "The download failed. Please try again later.",
+		"titlePage": "Title Page"
+	},
+	"reader": {
+		"font": "Change font",
+		"fontSize": "Font size",
+		"fontSmaller": "Decrease font size",
+		"fontBigger": "Increase font size",
+		"colorMode": "Change color mode"
+	},
+	"errors": {
+		"title": "Oops, something went wrong",
+		"bookNotFound": "Sorry, we could not find this story.",
+		"tokenError": "Your captcha token is invalid.",
+		"notFound": "This page could not be found.",
+		"serverError": "The story could not be fetched or converted due to an internal error.",
+		"unknown": "An unknown error occurred.",
+		"back": "Back to home"
 	},
 	"help": [
 		{
-			"title": "How to download a story from WP?",
-			"text": "You can open the story that you want to download and simply change the domain to your domain or <b>localhost:3000</b>. Or you copy the URL of the book and paste it into the input field on our page."
+			"title": "How can I download a story?",
+			"text": "Open the story you want on Wattpad. Then copy the address from your browser's address bar – no matter whether you are on the info page or inside a chapter – and paste it into the input field on the home page. Alternatively, you can simply enter the story's ID."
 		},
 		{
-			"title": "Which format should I choose for download?",
-			"text": "We provide two different formats. First, the <b>EPUB</b> format and second the <b>HTML</b>.<br/>EPUB is for E-Book reader like Kindle. You can download this and load it on your E-Book reader with a software called Calibre. EPUB also works really well with Apple Books. So if you have an IPhone, you should download EPUB and you can read it with Apple Books.<br/>If you are on another platform like a PC or an android smartphone, you should download HTML. We provide a .html file that you can open with any browser. This contains a complete reader with the offline available story. The reader also gives you the option to change the font, font size and color scheme."
+			"title": "Which format should I choose?",
+			"text": "We provide two formats: <b>EPUB</b> and <b>HTML</b>.<br/>EPUB files are ideal for e-book readers like Tolino or Amazon Kindle. To load the story onto your reader, you can use software such as <a href=\"https://calibre-ebook.com/\" target=\"_blank\" rel=\"noopener noreferrer\">Calibre</a>. The EPUB format also works with Apple Books on iPhone and iPad.<br/>If you prefer reading on a PC or an Android smartphone, choose the HTML format. This file contains a complete reader including your story and can be opened in any browser. The reader also lets you adjust the font, font size and color mode."
 		},
 		{
 			"title": "Terms",
-			"text": "This service is for private use only, do not sell <b>others</b>'s downloaded eBooks!</br>We do not endorse or condone such activity!"
+			"text": "This service is for private use only. Selling other people's downloaded e-books is not allowed! We do not endorse or condone such activity."
 		},
 		{
 			"title": "Any questions or problems?",
-			"text": "Make an Issue on the Github repo<br>Thanks to Feuerhamster and BluemediaGER for the Source</br>"
+			"text": "Open an issue on our GitHub page.<br/>Many thanks to Feuerhamster and BluemediaGER for the original source code."
 		}
 	],
-	"book": {
-		"download": {
-			"epub": "Download for E-Book reader (epub)",
-			"html": "Download PC / Smartphone (html)",
-			"pdf": "Download as PDF (pdf)"
-		},
-		"author": "Author",
-		"pubDate": "Published",
-		"lang": "Language",
-		"loading": {
-			"text": "Plese wait a few seconds while we prepare your download..."
-		}
-	},
-	"parts": "Parts",
-	"overview": "Overview",
-	"next": "Next part",
-	"startReading": "Start reading",
-	"errors": {
-		"bookNotFound": "Sorry but we can't find the book!",
-		"invalidSearch": "We can not parse your entered value.<br/> Please provide a link to a story or an ID.",
-		"tokenError": "Your Captcha-Token is invalid.",
-		"serverError": "The book could not be retrieved/converted due to an internal error."
+	"footer": {
+		"disclaimer": "WP Downloader is an independent open-source project and is not affiliated with Wattpad Corp. in any way.",
+		"license": "Licensed under MIT"
 	}
 }

@@ -1,7 +1,7 @@
 doctype xml
-html(xmlns="http://www.w3.org/1999/xhtml" xml:lang="de")
+html(xmlns="http://www.w3.org/1999/xhtml" xml:lang=langCode)
     head
-        title Title Page
+        title= title
         link(rel="stylesheet" href="css/title.css" type="text/css")
         meta(http-equiv="content-type" content="application/xhtml+xml; charset=utf-8")
 
@@ -11,5 +11,7 @@ html(xmlns="http://www.w3.org/1999/xhtml" xml:lang="de")
             h2= user.name
 
         div.infos
-            b Published:&#xA0;
-            span= new Date(lastPublishedPart.createDate).getFullYear()
+            p
+                b= publishedLabel + ": "
+                span= new Date(published).getFullYear()
+            p= description

@@ -2,23 +2,20 @@ doctype xml
 package(version="2.0" unique-identifier="PrimaryID" xmlns="http://www.idpf.org/2007/opf")
     metadata(xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dcterms="http://purl.org/dc/terms/")
         dc:title= title
-        dc:identifier(id="PrimaryID" opf:scheme="URI")= "urn:uri:" + url
+        dc:identifier(id="PrimaryID" opf:scheme="UUID")= "urn:uuid:" + uuid
         dc:identifier(opf:scheme="URI")= url
-
-        dc:language(xsi:type="dcterms:RFC4646") en
-
+        dc:language(xsi:type="dcterms:RFC4646")= langCode
         dc:creator(opf:role="aut")= user.name
-
         dc:publisher WP Downloader
         dc:description= description
-        dc:coverage
-        dc:source WP Downloader
-        dc:date(opf:event="ops-publication")= lastPublishedPart.createDate
-        dc:rights
+        dc:source= url
+        dc:date(opf:event="publication")= published
+        dc:date(opf:event="modification")= modified
         each tag in tags
             dc:subject= tag
 
         meta(name="cover" content="book-cover")
+        meta(name="generator" content="WP Downloader")
 
     manifest
         item#cover(href="cover.xhtml" media-type="application/xhtml+xml")
@@ -27,12 +24,9 @@ package(version="2.0" unique-identifier="PrimaryID" xmlns="http://www.idpf.org/2
         each part, i in parts
             item(id="chapter" + i href="chapter" + i + ".xhtml" media-type="application/xhtml+xml")
 
-
         item#titlepage-css(href="css/title.css" media-type="text/css")
         item#main-css(href="css/main.css" media-type="text/css")
-
-        item#book-cover(href="images/cover.jpg" media-type="image/jpeg")
-
+        item#book-cover(href="images/" + coverFile media-type=coverMediaType)
         item#ncx(href="toc.ncx" media-type="application/x-dtbncx+xml")
 
     spine(toc="ncx")
@@ -44,7 +38,7 @@ package(version="2.0" unique-identifier="PrimaryID" xmlns="http://www.idpf.org/2
 
     guide
         reference(type="cover" title="Cover" href="cover.xhtml")
-        reference(type="title-page" title="Title Page" href="title.xhtml")
+        reference(type="title-page" title=titlePageLabel href="title.xhtml")
 
         each part, i in parts
-            reference(type="text" title="Chapter" + i href="chapter" + i + ".xhtml")
+            reference(type="text" title="Chapter " + (i + 1) href="chapter" + i + ".xhtml")

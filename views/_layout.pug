@@ -2,7 +2,11 @@ doctype html
 html(lang=langName)
     include partials/head
     body
-        include partials/titlebar
-        block page
-
-script(src="/index.js")
+        a.skip-link(href="#main")= lang.skipToContent
+        include partials/navbar
+        main#main
+            block page
+        include partials/footer
+        script.
+            window.__I18N__ = !{JSON.stringify(lang).replace(/</g, "\\u003c")};
+        script(src="/index.js" defer)

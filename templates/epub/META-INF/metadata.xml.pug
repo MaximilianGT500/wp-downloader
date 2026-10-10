@@ -1,13 +1,14 @@
 doctype xml
 entry(xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:dcterms="http://purl.org/dc/terms/" xmlns="http://www.w3.org/2005/Atom" xmlns:schema="http://schema.org/")
     title= title
-    id
+    id= "urn:uuid:" + uuid
+    updated= modified
     author
         name= user.name
-        uri https://www.wattpad.com/user/#{user.username}
+        uri= "https://www.wattpad.com/user/" + user.username
 
-    published= lastPublishedPart.createDate
-    dcterms:language de
+    published= published
+    dcterms:language= langCode
 
     each tag in tags
         category(label=tag)

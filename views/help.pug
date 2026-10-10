@@ -1,7 +1,12 @@
 extends _layout
 
 block page
-    div.page
-        each help in lang.help
-            h1= help.title
-            p!= help.text
+
+    .container.faq-page
+
+        h1.page-title= lang.navbar.help
+
+        each item, i in lang.help
+            details.faq(open=(i === 0))
+                summary.faq-question= item.title
+                .faq-answer!= item.text

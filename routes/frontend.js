@@ -3,53 +3,92 @@ const router = express.Router();
 
 const WP = require("../services/wp");
 const Translation = require("../services/translation");
+const logger = require("../services/logger");
 
-router.use((req, res, next) => {
+function getTranslation(req) {
+	return Translation.getTranslation(req.acceptsLanguages(Translation.langs));
+}
 
-	req.trans = Translation.getTranslation(req.acceptsLanguages(Translation.langs));
+const ERROR_KEYS = {
+	book_not_found: "bookNotFound",
+	403: "tokenError",
+	404: "notFound",
+	500: "serverError",
+};
 
-	next();
+function renderError(req, res, code, status = 200) {
+	const trans = getTranslation(req);
+	const key = ERROR_KEYS[code] || "unknown";
+	res.status(status).render("error", { ...trans, error: code, errorMessage: trans.lang.errors[key] });
+}
 
-});
-
-router.get("/", async (req, res) => {
-
-	res.render("home", req.trans);
-
+router.get("/", (req, res) => {
+	res.render("home", getTranslation(req));
 });
 
 router.get("/help", (req, res) => {
-
-	res.render("help", req.trans);
-
+	res.render("help", getTranslation(req));
 });
 
 router.get("/error/:err", (req, res) => {
-	res.render("error", { error: req.params.err, lang: req.trans.lang, langName: req.trans.langName });
+	renderError(req, res, req.params.err);
 });
 
-router.get(/^\/((b)-)?(\d+)$/, async (req, res) => {
+async function handleBookRoute(req, res) {
 
-	let book;
+	const asBook = req.path.startsWith("/b-");
+	const id = req.params.id;
 
-	if(req.params[1] === "b") {
-		book = await WP.getBookById(req.params[2]);
+	let book = null;
+
+	if (asBook) {
+		book = await WP.getBookById(id);
 	} else {
-		book = await WP.getBookByPartId(req.params[2]);
-		book = book ? book.group : null;
+		const byPart = await WP.getBookByPartId(id);
+		book = byPart && byPart.group ? byPart.group : null;
 	}
 
-	if(book){
-		res.render("book", { book, lang: req.trans.lang, langName: req.trans.langName });
-	}else{
-		res.render("error", { error: "book_not_found", lang: req.trans.lang, langName: req.trans.langName });
+	if (!book) {
+		return renderError(req, res, "book_not_found", 404);
 	}
+
+	const trans = getTranslation(req);
+
+	const pubYear = book.lastPublishedPart?.createDate
+		? new Date(book.lastPublishedPart.createDate).getFullYear()
+		: null;
+
+	res.render("book", { ...trans, book, pubYear });
+
+}
+
+// /b-<story-id>  →  story metadata
+// /<part-id>     →  resolve via v4 API to the containing story
+router.get(/^\/b-(?<id>\d+)$/, handleBookRoute);
+router.get(/^\/(?<id>\d+)$/, handleBookRoute);
+
+// /story/<id>-<slug>  or  /<id>-<slug>  →  canonical routes
+router.get(/^\/(?:story\/)?\d+(?:-.*)?$/, (req, res) => {
+
+	const match = req.path.match(/^\/(?:story\/)?(\d+)/);
+
+	if (!match) return;
+
+	const isStory = req.path.startsWith("/story/");
+	res.redirect(301, isStory ? `/b-${match[1]}` : `/${match[1]}`);
 
 });
 
-router.get(/((story)\/)?(\d+)-?(.+)?/, async (req, res) => {
-	res.redirect(`/${req.params[1] ? "b-" : ""}${req.params[2]}`);
+// 404 page
+router.use((req, res) => {
+	renderError(req, res, "404", 404);
+});
 
+// 500 page
+router.use((err, req, res, next) => {
+	logger.error(err.stack || err.message || err);
+	if (res.headersSent) return next(err);
+	renderError(req, res, "500", 500);
 });
 
 module.exports = router;

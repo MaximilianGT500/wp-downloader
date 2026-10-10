@@ -1,64 +1,60 @@
 const express = require("express");
 const router = express.Router();
-const stream = require("stream");
 
 const WP = require("../services/wp");
 const Generator = require("../services/generator");
 const Translation = require("../services/translation");
+const logger = require("../services/logger");
+
+router.get("/health", (req, res) => {
+	res.json({ status: "ok", uptime: Math.round(process.uptime()) });
+});
 
 router.get("/:id/download/:format", async (req, res) => {
 
-    if (!Generator.availableFormats.includes(req.params.format)) {
-        res.status(400).send({ error: "unknown_format", formats: Generator.availableFormats });
-        console.log(`[${new Date().toISOString()}] Konverter: Benutzer hat versucht, die Story in "${req.params.format}" umzuwandeln`);
-        return;
-    }
+	const { id, format } = req.params;
 
-    let bookData = await WP.getBookById(req.params.id);
+	if (!/^\d{1,12}$/.test(id)) {
+		return res.status(400).json({ error: "invalid_id" });
+	}
 
-    if (!bookData) {
-        res.status(404).send({ error: "book_not_found" });
-        return;
-    }
+	if (!Generator.availableFormats.includes(format)) {
+		logger.warn(`Unbekanntes Format angefordert: "${format}"`);
+		return res.status(400).json({ error: "unknown_format", formats: Generator.availableFormats });
+	}
 
-    let parts = await WP.getParts(bookData.parts);
+	const book = await WP.getBookById(id);
 
-    let { lang, langName } = Translation.getTranslation(req.acceptsLanguages(Translation.langs));
+	if (!book) {
+		return res.status(404).json({ error: "book_not_found" });
+	}
 
-    if (req.params.format === "epub") {
-        let epub;
-        try {
-            epub = await Generator.epub(bookData, parts);
-        } catch (e) {
-            console.error(e);
-            return res.status(500).end();
-        }
+	const parts = await WP.getParts(book.parts || []);
 
-        let fileContents = Buffer.from(epub, "base64");
-        let readStream = new stream.PassThrough();
-        readStream.end(fileContents);
+	if (!parts.length) {
+		return res.status(502).json({ error: "parts_unavailable" });
+	}
 
-        res.set("Content-disposition", "attachment; filename=" + `${WP.formatBookTitle(bookData.title)}-${bookData.id}.epub`);
-        res.set("Content-Type", "application/epub+zip");
+	const { lang, langName } = Translation.getTranslation(req.acceptsLanguages(Translation.langs));
+	const filename = `${WP.formatBookTitle(book.title)}-${book.id}.${format}`;
 
-        readStream.pipe(res);
+	if (format === "epub") {
+		const epub = await Generator.epub(book, parts, lang, langName);
+		res.attachment(filename).type("application/epub+zip").send(epub);
+	} else {
+		const html = await Generator.html(book, parts, lang, langName);
+		res.attachment(filename).type("text/html; charset=utf-8").send(html);
+	}
 
-    } else if (req.params.format === "html") {
-        let html;
-        try {
-            html = await Generator.html(bookData, parts, langName, lang);
-        } catch (e) {
-            console.error(e);
-            return res.status(500).end();
-        }
+	logger.info(`Konvertiert: "${book.title}" (${id}) → ${format} (${parts.length}/${book.parts.length} Kapitel)`);
 
-        res.set("Content-disposition", "attachment; filename=" + `${WP.formatBookTitle(bookData.title)}-${bookData.id}.html`);
-        res.set("Content-Type", "text/html");
+});
 
-        res.send(html);
-    }
-
-    console.log(`[${new Date().toISOString()}] Umgewandelt: "${bookData.title}" (${req.params.id}) zu ${req.params.format} (${parts.length}/${bookData.parts.length} parts)`);
+// API errors are answered as JSON
+router.use((err, req, res, next) => {
+	logger.error(err.stack || err.message || err);
+	if (res.headersSent) return next(err);
+	res.status(500).json({ error: "internal_server_error" });
 });
 
 module.exports = router;

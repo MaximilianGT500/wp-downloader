@@ -10,11 +10,6 @@ body {
   margin-right: 1em;
 }
 
-div.logo {
-  text-align: left;
-  padding-top: 2%;
-}
-
 h1 {
   font-size: larger;
   text-align: center;
@@ -28,13 +23,13 @@ h2 {
 
 div.infos {
   font-size: smaller;
-  padding-top: 15%;
+  padding-top: 12%;
 }
 
-p {
-  text-indent: 0.0em;
-  margin-top: 0.0em;
-  margin-bottom: 0.0em;
+div.infos p {
+  text-indent: 0;
+  margin: 0.4em 0 0 0;
+  text-align: center;
 }
 
 a {

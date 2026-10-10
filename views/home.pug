@@ -1,12 +1,33 @@
 extends _layout
 
 block page
-    div.page.center
-        h3 WP Story Downloader
-        br
-        h1!= lang.home.text
 
-        form#searchform
-            p#error-result.error
-            input(type="text" placeholder=lang.home.placeholder)
-            button= lang.home.submit
+    section.hero
+        .container.hero-inner
+            h1.hero-title= lang.home.heroTitle
+            p.hero-text= lang.home.heroText
+            form#searchform.search-card(novalidate)
+                .search-row
+                    input#search-input(type="text" placeholder=lang.home.placeholder aria-label=lang.home.placeholder autocomplete="off" spellcheck="false")
+                    button.button.button-primary(type="submit")= lang.home.submit
+                p#error-result.search-error(role="alert" hidden)= lang.home.invalidSearch
+
+    section.section
+        .container
+            h2.section-title= lang.home.featuresTitle
+            ol.steps
+                each step, i in lang.home.steps
+                    li.step
+                        span.step-number= i + 1
+                        div
+                            h3= step.title
+                            p= step.text
+
+    section.section.section-alt
+        .container
+            h2.section-title= lang.home.formatsTitle
+            .formats
+                each format in lang.home.formats
+                    article.format-card
+                        h3= format.title
+                        p= format.text
